@@ -9,9 +9,8 @@ jQuery(document).ready(function($) {
     function updatePage(obj) {
         $('#usernames').val(obj.usernames.toString() || null);
         $('#blacklisted_usernames').val(obj.blacklistedUsernames.toString() || null);
-        $('#file_name').val(obj.fileName || null);
-        $('#file_location').val(obj.fileLocation || null);
         $('#cycle_wait_time').val(obj.cycleWaitTime || 30);
+        $('#autostart').prop('checked',obj.autoStart);
     }
 
     $('#save').on('click', function() {
@@ -24,18 +23,15 @@ jQuery(document).ready(function($) {
         blacklistedUsernames = $('#blacklisted_usernames').val();
         blacklistedUsernames = blacklistedUsernames.split(',');
 
-        fileName = $('#file_name').val();
-
-        fileLocation = $('#file_location').val();
-
         cycleWaitTime = $('#cycle_wait_time').val();
+
+        autoStart = $('#autostart').prop('checked');
 
         store_obj = {
             usernames: usernames,
             blacklistedUsernames: blacklistedUsernames,
-            fileName: fileName,
-            fileLocation: fileLocation,
-            cycleWaitTime:cycleWaitTime
+            cycleWaitTime:cycleWaitTime,
+            autoStart:autoStart
         };
 
         store_obj = JSON.stringify(store_obj);
@@ -44,6 +40,18 @@ jQuery(document).ready(function($) {
             "tweetdeck_options": store_obj
         }, function() {
             $('#status').addClass('success').text('Saved').fadeIn();
+        });
+    });
+
+    $('#start').on('click', function() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {message: "start"});
+        });
+    });
+
+    $('#stop').on('click', function() {
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+          chrome.tabs.sendMessage(tabs[0].id, {message: "stop"});
         });
     });
 });
