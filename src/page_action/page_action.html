@@ -1,0 +1,80 @@
+<!doctype html>
+<style type="text/css">
+	#mainPopup {
+		padding: 10px;
+		height: 200px;
+		width: 400px;
+		font-family: Helvetica, Ubuntu, Arial, sans-serif;
+	}
+	h2 {
+		font-size: 2em;
+	}
+
+	#extension-options,#extension-controls,h2{
+		margin-bottom: 15px;
+	}
+
+	#extension-options label,#extension-options input {
+	    display:inline-block;
+	    width:25%;
+	    margin-bottom:10px;
+	}
+	#extension-options input {
+		width: 65%;
+	    border: 1px solid #50a5e6;
+	    padding: 8px;
+	    border-radius: 5px;
+	}
+
+	button{
+		width: 20%;
+		padding: 8px;
+		border: none;
+		border-radius: 5px;
+		color: white;
+	}
+
+	button#save{
+		background: #13A713;
+	}
+
+	button#start{
+		background: #50a5e6
+	}
+
+	button#stop{
+		background: red;
+	}
+
+	#status{
+		font-size: 24px;
+	}
+
+	#status.success{
+		color: green;
+	}
+
+	#status.error{
+		color: red;
+	}
+
+</style>
+
+<div id="mainPopup">
+<h2>Tweedeck Extension Options</h2>
+<div id='status'></div>
+<div id='extension-options'>
+<label>Usernames:</label><input id='usernames' type='text' placeholder="enter usernames (lowercase)"><br/>
+<label>Blacklisted Usernames:</label><input id='blacklisted_usernames' type='text' placeholder="enter blacklisted usernames (lowercase)">
+<label>Cycle Wait Time:</label><input id='cycle_wait_time' type='text' placeholder = 'enter time in minutes'>
+<label>Name of log file:</label><input id='file_name' type='text' placeholder = 'enter file name'>
+<label>Location of log file:</label><input id='file_location' type='text' placeholder = 'enter file location'>
+<button id='save'>Save</button>
+</div>
+<div id='extension-controls'>
+	<button id='start'>Start</button><span> &nbsp;&nbsp;&nbsp;</span><button id='stop'>Stop</button>
+</div>
+<div id="logs"></div>
+</div>
+<script type="text/javascript" src='../../js/jquery/jquery.min.js'></script>
+<script type="text/javascript" src='page_action.js'></script>
