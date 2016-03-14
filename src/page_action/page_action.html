@@ -26,7 +26,7 @@
 	    border-radius: 5px;
 	}
 
-	button{
+	button,a{
 		width: 20%;
 		padding: 8px;
 		border: none;
@@ -38,12 +38,16 @@
 		background: #13A713;
 	}
 
-	button#start{
+	button#start,a{
 		background: #50a5e6
 	}
 
 	button#stop{
 		background: red;
+	}
+
+	button#delete{
+		background: #D43493;
 	}
 
 	#status{
@@ -58,22 +62,31 @@
 		color: red;
 	}
 
+	a{
+		text-decoration: none;
+	}
+
+	#autostart_section{
+		display: none;
+	}
+
 </style>
 
 <div id="mainPopup">
-<h2>Tweedeck Extension Options</h2>
+<h2>GT Autodeck Options</h2>
 <div id='status'></div>
 <div id='extension-options'>
-<label>Usernames:</label><input id='usernames' type='text' placeholder="enter usernames (lowercase)"><br/>
-<label>Blacklisted Usernames:</label><input id='blacklisted_usernames' type='text' placeholder="enter blacklisted usernames (lowercase)">
-<label>Cycle Wait Time:</label><input id='cycle_wait_time' type='text' placeholder = 'enter time in minutes'>
-<label>AutoStart:</label><input type='checkbox' id='autostart'>
-<button id='save'>Save</button>
+<label>Username:</label><input id='usernames' type='text' placeholder="Tweet List Username (lowercase letters)"><br/>
+<label>Deck Blacklist:</label><input id='blacklisted_usernames' type='text' placeholder="username1, username2, etc (lowercase letters)">
+<label>Wait Time:</label><input id='cycle_wait_time' type='text' placeholder = 'In Minutes'>
+<span id="autostart_section"><label>AutoStart:</label><input type='checkbox' id='autostart'></span>
+<button id='save'>Save</button><span> &nbsp;&nbsp;&nbsp;</span><button id='delete'>Delete</button>
 </div>
 <div id='extension-controls'>
-	<button id='start'>Start</button><span> &nbsp;&nbsp;&nbsp;</span><button id='stop'>Stop</button>
+	<button id='start'>Start</button><span> &nbsp;&nbsp;&nbsp;</span><button id='stop'>Stop</button></div><br/>
+	<a id="open_logs" href='/src/options/index.html' target="_blank">Open Logs</a>
 </div>
-<div id="logs"></div>
+
 </div>
 <script type="text/javascript" src='../../js/jquery/jquery.min.js'></script>
 <script type="text/javascript" src='page_action.js'></script>

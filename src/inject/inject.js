@@ -3,8 +3,11 @@ chrome.runtime.sendMessage({"message": "activate_icon"});
 
 var $,user,usernames,blacklistedUsername,waitTime,currentUserName,generalWait;
 var isCycleOver;
-var currentAccount;
+var currentAccount,scrollTimer;
 var isStarted,isPaused,isStopped = true;
+
+generalWait = 1.5; //input in seconds -> bot speed
+generalWait = generalWait * 1000;
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
@@ -18,39 +21,42 @@ chrome.runtime.onMessage.addListener(
 });
 
 function start(){
-    chrome.storage.sync.get("tweetdeck_options", function(obj) {
-        if (obj.tweetdeck_options) {
-            chrome.runtime.sendMessage({log: "Getting Values from Extension"});
+    chrome.storage.local.get("tweetdeck_options", function(obj) {
+        // if(obj && obj.tweetdeck_options){
+        //     var tweetdeck_options = JSON.parse(obj.tweetdeck_options);
+        //     isStopped = !tweetdeck_options.autoStart;
+        // }
+        var tweetdeck_options = JSON.parse(obj.tweetdeck_options);
+        var timer = setInterval(function(){
+            console.log(isStopped);
+            if (obj && obj.tweetdeck_options && !isStopped) {
+                console.log('started');
+                chrome.runtime.sendMessage({log: "Getting Values from Extension"});
 
-            var tweetdeck_options = JSON.parse(obj.tweetdeck_options);
-            usernames = tweetdeck_options.usernames;
-            blacklistedUsername = tweetdeck_options.blacklistedUsernames;
-            waitTime = tweetdeck_options.cycleWaitTime;
-            isStopped = !tweetdeck_options.autoStart;
+                usernames = tweetdeck_options.usernames;
+                blacklistedUsername = tweetdeck_options.blacklistedUsernames;
+                waitTime = tweetdeck_options.cycleWaitTime;
 
-            user = 0;
-            currentAccount = 1;
-            isCycleOver = false;
-            currentUserName = '';
+                user = 0;
+                currentAccount = 1;
+                isCycleOver = false;
+                currentUserName = '';
 
-            generalWait = 1.5; //input in seconds -> bot speed
-            generalWait = generalWait * 1000;
+                scrollTimer = 5;
+                scrollTimer = scrollTimer * 1000;
 
-            waitTime = waitTime * 60; // converting to seconds
-            waitTime = waitTime * 1000; //converting to milliseconds
+                chrome.runtime.sendMessage({log: "usernames: "+usernames.toString()});
+                chrome.runtime.sendMessage({log: "blacklistedUsernames: "+blacklistedUsername.toString()});
+                chrome.runtime.sendMessage({log: "waitTime: "+waitTime+" minutes"});
+                chrome.runtime.sendMessage({log: "currentAccount: "+currentAccount});
 
-            chrome.runtime.sendMessage({log: "usernames:"+usernames.toString()});
-            chrome.runtime.sendMessage({log: "blacklistedUsernames:"+blacklistedUsername.toString()});
-            chrome.runtime.sendMessage({log: "waitTime:"+waitTime});
-            chrome.runtime.sendMessage({log: "currentAccount:"+currentAccount});
+                waitTime = waitTime * 60; // converting to seconds
+                waitTime = waitTime * 1000; //converting to milliseconds
 
-            var timer = setInterval(function(){
-                if(!isStopped){
-                    clearInterval(timer);
-                    onFirstLoadInit();
-                }
-            },1000);
-        }
+                clearInterval(timer);
+                onFirstLoadInit();
+            }
+        },generalWait);
     });
 }
 
@@ -119,7 +125,7 @@ function clickDefaultAccountButton(){
 }
 
 function clickSearchBtn(){
-
+    var triggers = 0;
     var id = user;
     $('.js-app-header .app-search-fake')[0].click();
     chrome.runtime.sendMessage({log: 'search button clicked'});
@@ -133,6 +139,12 @@ function clickSearchBtn(){
         		var event = new KeyboardEvent('keydown');
         		el.dispatchEvent(event);
                 var timer = setInterval(function(){
+                    if(triggers==5){
+                		clearInterval(timer);
+                		window.location.reload();
+                		return;
+                	}
+                	triggers++;
                     if($('.js-popover-content ul.list-divider.has-results li').length){
                         chrome.runtime.sendMessage({log: 'Selecting user from search data: '+usernames[id]});
                         $('.js-popover-content ul.list-divider.has-results li')[0].click();
@@ -141,7 +153,7 @@ function clickSearchBtn(){
                     }else{
                         $('.js-popover-content input.search-input').val(usernames[id]);
         				setTimeout(function(){
-                            chrome.runtime.sendMessage({log: 'calling twitter search request again'});
+                            chrome.runtime.sendMessage({log: 'No twitter search results !! calling twitter search request again'});
         					var el = $('.js-popover-content input.search-input')[0];
         					var event = new KeyboardEvent('keydown');
         					el.dispatchEvent(event);
@@ -159,7 +171,10 @@ function clickLikes(){
             clearInterval(timer);
             chrome.runtime.sendMessage({log: 'Like Button clicked'});
             $('.js-modal-content .icon.icon-favorite')[0].click();
-            clickRandomTweet();
+            setTimeout(function(){
+                loadTweets();
+            },generalWait);
+            //clickRandomTweet();
         }else{
             if($('.js-popover-content ul.list-divider.has-results li').length){
                 $('.js-popover-content ul.list-divider.has-results li')[0].click();
@@ -168,14 +183,40 @@ function clickLikes(){
     },generalWait);
 }
 
+function loadTweets(){
+    var scrollHeight = 1000000;
+    var d = jQuery('.js-column-content .js-column-scroller.js-dropdown-container.scroll-alt');
+        d = d[0];
+    getTweets();
+    function getTweets(){
+        if($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
+            tweets = $(d).find('article.stream-item').length;
+            $(d).scrollTop(100000);
+            setTimeout(function(){
+                if(tweets != $(d).find('article.stream-item').length){
+                    getTweets();
+                    scrollHeight+=1000000;
+                }else{
+                    clickRandomTweet();
+                }
+            },scrollTimer);
+        }else{
+            setTimeout(function(){
+                loadTweets();
+            },generalWait);
+        }
+    }
+
+}
+
 function clickRandomTweet(){
     var timer = setInterval(function(){
-        console.log($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length);
         if(!isStopped && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
             clearInterval(timer);
             var length = $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length - 1;
             var random = Math.floor(Math.random()*length);
-            chrome.runtime.sendMessage({log: 'selecting Random Tweet no: '+random});
+            chrome.runtime.sendMessage({log: 'selecting Random Tweet'});
+            //chrome.runtime.sendMessage({log: 'selecting Random Tweet no: '+random});
             var tweet = $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article:eq('+random+')');
             $(tweet).find('.icon-retweet')[0].click();
             selectUsersAndTweet();
@@ -213,7 +254,7 @@ function selectUsersAndTweet(){
 
             setTimeout(function(){
                 $('#actions-modal .js-retweet-button')[0].click();
-                chrome.runtime.sendMessage({log: 'Retweet button clicked'});
+                chrome.runtime.sendMessage({log: 'Retweet button clicked and waiting for '+Math.floor(waitTime/(1000*60))+' minutes')});
                 user++;
                 var timer = setInterval(function(){
                     if(isStopped){
