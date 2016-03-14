@@ -4,7 +4,7 @@ chrome.runtime.sendMessage({"message": "activate_icon"});
 var $,user,usernames,blacklistedUsername,waitTime,currentUserName,generalWait;
 var isCycleOver;
 var currentAccount,scrollTimer;
-var isStarted,isPaused,isStopped = true;
+var isStarted,isPaused,isStopped = false;
 
 generalWait = 1.5; //input in seconds -> bot speed
 generalWait = generalWait * 1000;
@@ -62,8 +62,10 @@ function start(){
 
 window.addEventListener('load', function () {
     $ = jQuery;
-    chrome.runtime.sendMessage({log: "Extension running"});
-    start();
+    chrome.runtime.sendMessage({log: "Extension loaded and run in 10 seconds"});
+    setTimeout(function(){
+        start();
+    },10000);
 }, false);
 
 function onFirstLoadInit(){
@@ -254,7 +256,7 @@ function selectUsersAndTweet(){
 
             setTimeout(function(){
                 $('#actions-modal .js-retweet-button')[0].click();
-                chrome.runtime.sendMessage({log: 'Retweet button clicked and waiting for '+Math.floor(waitTime/(1000*60))+' minutes')});
+                chrome.runtime.sendMessage({log: 'Retweet button clicked and waiting for '+Math.floor(waitTime/(1000*60))+' minutes'});
                 user++;
                 var timer = setInterval(function(){
                     if(isStopped){
