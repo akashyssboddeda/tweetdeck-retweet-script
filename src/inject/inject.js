@@ -62,8 +62,9 @@ function start(){
 
 window.addEventListener('load', function () {
     $ = jQuery;
-    chrome.runtime.sendMessage({log: "Extension loaded and run in 10 seconds"});
+    chrome.runtime.sendMessage({log: "Page loaded waiting for 10 seconds"});
     setTimeout(function(){
+        chrome.runtime.sendMessage({log: "Extension started bot work after waiting for 10 seconds"});
         start();
     },10000);
 }, false);
