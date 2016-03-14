@@ -221,20 +221,20 @@ function selectUsersAndTweet(){
                     }
                     clearInterval(timer);
                     if(usernames.length != user){
-                        chrome.runtime.sendMessage({log: 'Searching another user and waiting for '+generalWait+' ms'});
+                        chrome.runtime.sendMessage({log: 'Searching another user and waited for '+generalWait+' ms'});
                         setTimeout(function(){
                             onFirstLoadInit();
                         },generalWait);
                     }else{
                         if(isCycleOver){
                             setTimeout(function(){
-                                chrome.runtime.sendMessage({log: 'cycle over starting again and waiting for '+(waitTime/60000)+' minutes'});
+                                chrome.runtime.sendMessage({log: 'cycle over starting again and waited for '+(waitTime/60000)+' minutes'});
                                 start();
                             },waitTime);
                         }else{
                             setTimeout(function(){
                                 currentAccount++;
-                                chrome.runtime.sendMessage({log: 'Repeating process for another user: '+currentAccount+' and waiting for '+((waitTime/60000))+' minutes'});
+                                chrome.runtime.sendMessage({log: 'Repeating process for another user: '+currentAccount+' and waited for '+((waitTime/60000))+' minutes'});
                                 user = 0;
                                 onFirstLoadInit();
                             },waitTime);
