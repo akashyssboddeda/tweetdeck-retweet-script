@@ -5,7 +5,3 @@ chrome.extension.onMessage.addListener(
         //chrome.tabs.create({ 'url': 'chrome://extensions/?options=' + chrome.runtime.id });
     }
 });
-
-jQuery(document).ready(function(){
-    alert('loaded');
-});
