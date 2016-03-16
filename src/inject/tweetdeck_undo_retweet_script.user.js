@@ -77,13 +77,15 @@ function selectUserAccount(){
         if(id==$('.js-account-settings-scroll-container .js-account-settings-accounts .js-accordion-item').length-1){
             isCycleOver = true;
         }
-        setTimeout(function(){
+        setTimeout(function(id){
             console.log('current selected username: '+currentUserName);
-            currentUserName = $('.js-account-settings-scroll-container .js-account-settings-accounts .js-accordion-item:eq('+id+') .username')[0].innerHTML.trim().replace('@','');
-            currentUserName = currentUserName.toLowerCase();
-            console.log('calling clickDefaultAccountButton');
-            clickDefaultAccountButton();
-        },1000);
+            if($('.js-account-settings-scroll-container .js-account-settings-accounts .js-accordion-item:eq('+id+') .username').length){
+                currentUserName = $('.js-account-settings-scroll-container .js-account-settings-accounts .js-accordion-item:eq('+id+') .username')[0].innerHTML.trim().replace('@','');
+                currentUserName = currentUserName.toLowerCase();
+                console.log('calling clickDefaultAccountButton');
+                clickDefaultAccountButton();
+            }
+        }(id),1000);
     },generalWait);
 }
 
@@ -171,6 +173,7 @@ function loadTweets(){
 function loadRetweets(){
     var retweets = $('#open-modal article .is-retweet .position-rel a.tweet-action');
     if(!retweets.length){
+        console.log('no retweets');
         currentAccount++;
         user = 0;
         onFirstLoadInit();
@@ -199,17 +202,17 @@ function loadRetweets(){
 function clickMenu(element){
     if(!element)
         return;
-    setTimeout(function(){
+    setTimeout(function(element){
         element.click();
-        setTimeout(function(){
+        setTimeout(function(element){
             element = $(element).next();
             element = $(element).find('a[data-action=undo-retweet]')[0];
-            setTimeout(function(){
+            setTimeout(function(element){
                 $(element).parent().addClass('is-selected');
                 console.log('clicked undo retweet');
                 element.click();
-            },1000);
-        },1000);
-    },1000);
+            }(element),1000);
+        }(element),1000);
+    }(element),1000);
 }
 // Your code here...
