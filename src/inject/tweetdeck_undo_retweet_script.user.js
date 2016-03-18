@@ -115,7 +115,11 @@ function clickSearchBtn(){
         var timer = setInterval(function(){
             if(triggers==5){
                 clearInterval(timer);
-                window.location.reload();
+                currentAccount++;
+                user = 0;
+                console.log('no refresh, switching to next default account');
+                onFirstLoadInit();
+                //window.location.reload();
                 return;
             }
             triggers++;
