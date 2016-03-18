@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tweetdeck undo tweet script
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Userscript to autotweet on tweetdeck
 // @author       Gopinath Shiva
 // @match        https://tweetdeck.twitter.com/
