@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         tweetdeck script
+// @name         tweetdeck double RT script
 // @namespace    http://tampermonkey.net/
 // @version      0.5
 // @description  Userscript to autotweet on tweetdeck
@@ -139,7 +139,7 @@ function clickDefaultAccountButton(){
 }
 function clickSearchBtn(){
 	var triggers = 0;
-    console.log('inside clicking Search Button');
+    console.log('opening Search sidebar');
     var id = user;
     $('.js-app-header .app-search-fake').click();
     setTimeout(function(){
@@ -297,11 +297,15 @@ function selectUsersAndTweet(){
                         if(isCycleOver){
                         	console.log('cycle over starting again in '+waitTime/60000+' minutes');
                             setTimeout(function(){
+                            	console.log('closing search sidebar');
+                            	$('.js-app-header .app-search-fake').click();
                                 start();
                             },waitTime);
                         }else{
                         	console.log('Repeating process for another user: '+currentAccount+ 'and waiting for '+waitTime/60000+' minutes');
                             setTimeout(function(){
+                            	console.log('closing search sidebar');
+                            	$('.js-app-header .app-search-fake').click();
                                 currentAccount++;
                                 user = 0;
                                 onFirstLoadInit();
