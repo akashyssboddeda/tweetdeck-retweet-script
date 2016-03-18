@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tweetdeck double RT script
 // @namespace    http://tampermonkey.net/
-// @version      0.5
+// @version      0.6
 // @description  Userscript to autotweet on tweetdeck
 // @author       Gopinath Shiva
 // @match        https://tweetdeck.twitter.com/
