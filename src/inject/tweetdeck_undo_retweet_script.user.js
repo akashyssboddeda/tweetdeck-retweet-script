@@ -127,8 +127,20 @@ function clickSearchBtn(){
                 $('.js-popover-content ul.list-divider.has-results li')[0].click();
                 clearInterval(timer);
                 clickLikes();
+            }else{
+                console.log('searching again');
+                $('.js-popover-content input.search-input').val('');
+                setTimeout(function(){
+                    $('.js-popover-content input.search-input').val(usernames[id]);
+                },100);
+                setTimeout(function(){
+                    console.log('triggering keydown again');
+                    var el = $('.js-popover-content input.search-input')[0];
+                    var event = new KeyboardEvent('keydown');
+                    el.dispatchEvent(event);
+                },1000);
             }
-        },generalWait);
+        },(generalWait+7000));
     },3000);
 }
 
@@ -150,18 +162,18 @@ function clickLikes(){
 }
 
 function loadTweets(){
-    var scrollHeight = 1000000;
+    var scrollHeight = 10000;
     var d = jQuery('.js-column-content .js-column-scroller.js-dropdown-container.scroll-alt');
         d = d[0];
     getTweets();
     function getTweets(){
         if($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
             tweets = $(d).find('article.stream-item').length;
-            $(d).scrollTop(100000);
+            $(d).scrollTop(scrollHeight);
             setTimeout(function(){
                 if(tweets != $(d).find('article.stream-item').length){
                     getTweets();
-                    scrollHeight+=1000000;
+                    scrollHeight+=10000;
                 }else{
                     loadRetweets();
                 }
@@ -177,7 +189,7 @@ function loadTweets(){
 function loadRetweets(){
     var retweets = $('#open-modal article .is-retweet .position-rel a.tweet-action');
     if(!retweets.length){
-        console.log('no retweets');
+        console.log('no retweets found hence switching default account');
         currentAccount++;
         user = 0;
         onFirstLoadInit();
@@ -186,12 +198,13 @@ function loadRetweets(){
     var retweetCounter = 0;
     console.log('total retweets length:'+retweets.length);
     var timer = setInterval(function(){
-        if(isCycleOver){
-            clearInterval(timer);
-            return;
-        }
         if(retweetCounter>(retweets.length-1)){
-            clearInterval(timer);
+        	clearInterval(timer);
+        	if(isCycleOver){
+        		console.log('Full cycle over, hence Undo Retweet done!!!');
+        		return;
+        	}
+        	console.log('switching default account');
             currentAccount++;
             user = 0;
             onFirstLoadInit();
