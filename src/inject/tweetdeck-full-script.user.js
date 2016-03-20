@@ -13,7 +13,7 @@
 var $,user,usernames,blacklistedUsername,waitTime,currentUserName,generalWait,muteUsernames;
 var firstTweetId = -1;
 var tweetCount = 2;
-var isCycleOver,userWaitTimes,tweetCounts,currentMuteUsername;
+var isCycleOver,tweetCounts,currentMuteUsername;
 var currentAccount,scrollTimer;
 var tweets = 0;
 function start(){
@@ -24,7 +24,6 @@ function start(){
     isCycleOver = false;
     firstTweetId = -1;
     tweetCount = 2;
-    userWaitTimes = [2,1,1];
     usernames = ['bilaleren17','justsomeguy1112','justsomeguy2223'];
     tweetCounts = [1,2,2];
     blacklistedUsername = ['vividdeck'];
@@ -37,10 +36,6 @@ function start(){
     generalWait = generalWait * 1000;
     waitTime = waitTime * 60; // converting to seconds
     waitTime = waitTime * 1000; //converting to milliseconds
-
-    for(var i=0;i<userWaitTimes.length;i++){ //converting to ms
-    	userWaitTimes[i] *= 1000 * 60;
-    }
 
     if(sessionStorage.getItem('lastUser')){
     	user = sessionStorage.getItem('lastUser');
@@ -373,7 +368,6 @@ function doSingleRT(){
             }
 
             setTimeout(function(){
-                var userWaitTime = userWaitTimes[user];
                 console.log('Clicking Retweet Button');
                 $('#actions-modal .js-retweet-button').click();
                 setTimeout(function(){
@@ -444,13 +438,12 @@ function afterClickingRetweet(){
 	if(tweetCounts[user]==2){
 		if(!tweetCount){
 	        tweetCount = 2;
-	        var userWaitTime = userWaitTimes[user];
 	        user++;
 	        if(usernames.length != user){
-	        	console.log('changing username and waiting for '+(userWaitTime/60000)+' minutes');
+	        	console.log('changing username and waiting for '+(generalWait/1000)+' seconds');
 	            setTimeout(function(){
 	                clickSearchBtn();
-	            },userWaitTime);
+	            },generalWait);
 	        }else{
 	            if(isCycleOver){
 	            	console.log('cycle over starting again in '+waitTime/60000+' minutes');
@@ -476,13 +469,12 @@ function afterClickingRetweet(){
 	        },generalWait);
 	    }
 	}else{
-		var userWaitTime = userWaitTimes[user];
 		user++;
         if(usernames.length != user){
-        	console.log('changing username and waiting for '+(userWaitTime/60000)+' minutes');
+        	console.log('changing username and waiting for '+(generalWait/1000)+' seconds');
             setTimeout(function(){
                 onFirstLoadInit();
-            },userWaitTime);
+            },generalWait);
         }else{
             if(isCycleOver){
                 console.log('cycle over starting again');
