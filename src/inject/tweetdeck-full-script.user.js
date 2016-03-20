@@ -257,9 +257,9 @@ function clickRandomTweet(){
         if($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
             clearInterval(timer);
             var length = $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length;
-            var random = Math.floor(Math.random()*length)-1;
+            var random = Math.floor(Math.random()*length);
             while(firstTweetId==random){
-                random = Math.floor(Math.random()*length)-1;
+                random = Math.floor(Math.random()*length);
             }
             console.log('selecting Random Tweet: '+random);
             firstTweetId = random;
