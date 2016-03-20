@@ -160,7 +160,7 @@ function clickSearchBtn(){
         					var el = $('.js-popover-content input.search-input')[0];
         					var event = new KeyboardEvent('keydown');
         					el.dispatchEvent(event);
-        				},100);
+        				},1000);
         			}
                 },generalWait);
             },1000);
