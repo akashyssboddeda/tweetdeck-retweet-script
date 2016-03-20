@@ -140,7 +140,7 @@ function clickSearchBtn(){
                     el.dispatchEvent(event);
                 },1000);
             }
-        },(generalWait+7000));
+        },(generalWait+3000));
     },3000);
 }
 

@@ -43,7 +43,7 @@ function start(){
     	if(usernames.length-1 < user){
     		user = 0;
     	}
-    	console.log('retrieving user location from browser and user location is: '+user);
+    	console.log('retrieving username location from browser and username position is: '+user);
     	sessionStorage.removeItem('lastUser');
     }
 
@@ -105,11 +105,15 @@ function removeMuteUsers(){
                 var text = $(v).text().replace('Muting user','');
                 text = text.trim();
                 text = text.slice(1,text.length-1);
+                console.log('checking mute user: '+text+' present in muteUsernames or not');
                 setTimeout(function(v,text,k){
                     if(muteUsernames.indexOf(text)>=0){
+                        console.log('cliking unmute');
                         $(v).find('input').click();
                     }
+                    console.log('index is '+k+' and limit is '+limit);
                     if(k == limit-1){
+                        console.log('mute is done proceeding to unblock');
                         setTimeout(function(){
                             checkUnblock();
                         },generalWait);
@@ -151,7 +155,7 @@ function checkUnblock(){
 	                    		setTimeout(function(){
 	                    			$('.js-modal-content .sprite-close').click();
 	                    			if(currentMuteUsername == muteUsernames.length -1){
-	                    				console.log('unblock finsihed proceeding account click');
+	                    				console.log('unblock finished proceeding account click');
 	                    				startAccountClick();
 	                    			}else{
 	                    				currentMuteUsername++;
@@ -161,7 +165,7 @@ function checkUnblock(){
 	                    		},100);
 	                    	}else{
 	                    		if(currentMuteUsername == muteUsernames.length -1){
-	                    			console.log('unblock finsihed proceeding account click');
+	                    			console.log('unblock finished proceeding account click');
                     				startAccountClick();
                     			}else{
                     				currentMuteUsername++;
@@ -169,7 +173,7 @@ function checkUnblock(){
                     				checkUnblock();
                     			}
 	                    	}
-	                    },generalWait);
+	                    },(generalWait*4));
 	                }else{
 	                    console.log('searching again');
 	                    muteUsername = muteUsernames[currentMuteUsername];
@@ -187,7 +191,7 @@ function checkUnblock(){
 		                    },generalWait);
 	                    },generalWait);
 	                }
-	            },(generalWait+7000));
+	            },(generalWait+3000));
         	},generalWait);
 		},generalWait);
 	},generalWait);
@@ -243,8 +247,8 @@ function clickSearchBtn(){
             var timer = setInterval(function(){
             	if(triggers==5){
             		clearInterval(timer);
+                    sessionStorage.setItem('lastUser',user);
             		window.location.reload();
-            		sessionStorage.setItem('lastUser',user);
             		return;
             	}
             	triggers++;
@@ -287,18 +291,18 @@ function clickLikes(){
 }
 
 function loadTweets(){
-    var scrollHeight = 1000000;
+    var scrollHeight = 100000;
     var d = jQuery('.js-column-content .js-column-scroller.js-dropdown-container.scroll-alt');
         d = d[0];
     getTweets();
     function getTweets(){
         if($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
             tweets = $(d).find('article.stream-item').length;
-            $(d).scrollTop(100000);
+            $(d).scrollTop(scrollHeight);
             setTimeout(function(){
                 if(tweets != $(d).find('article.stream-item').length){
                     getTweets();
-                    scrollHeight+=1000000;
+                    scrollHeight+=100000;
                 }else{
                     clickRandomTweet();
                 }
