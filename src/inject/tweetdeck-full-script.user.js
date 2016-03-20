@@ -13,12 +13,13 @@
 var $,user,usernames,blacklistedUsername,waitTime,currentUserName,generalWait,muteUsernames;
 var firstTweetId = -1;
 var tweetCount = 2;
-var isCycleOver,userWaitTimes,tweetCounts;
+var isCycleOver,userWaitTimes,tweetCounts,currentMuteUsername;
 var currentAccount,scrollTimer;
 var tweets = 0;
 function start(){
     console.log('initializing values');
     user = 0;
+    currentMuteUsername = 0;
     currentAccount = 1;
     isCycleOver = false;
     firstTweetId = -1;
@@ -27,7 +28,7 @@ function start(){
     usernames = ['bilaleren17','justsomeguy1112','justsomeguy2223'];
     tweetCounts = [1,2,2];
     blacklistedUsername = ['vividdeck'];
-    muteUsernames = [];
+    muteUsernames = ['alimaadelat'];
     waitTime = 1;
     currentUserName = '';
     scrollTimer = 5;
@@ -115,7 +116,7 @@ function removeMuteUsers(){
                     }
                     if(k == limit-1){
                         setTimeout(function(){
-                            startAccountClick();
+                            checkUnblock();
                         },generalWait);
                     }
                 }(v,text,k),generalWait);
@@ -125,6 +126,76 @@ function removeMuteUsers(){
         	startAccountClick();
         }
     },generalWait);
+}
+
+function checkUnblock(){
+	console.log('begin checking unblock');
+	var muteUsername = muteUsernames[currentMuteUsername];
+	setTimeout(function(){
+		console.log('clicking search icon');
+		$('.js-app-header .app-search-fake').click();
+		setTimeout(function(){
+			console.log('searching username: '+muteUsername);
+			$('.js-popover-content input.search-input').val(muteUsername);
+        	setTimeout(function(){
+        		var triggers = 0;
+            	$('.js-popover-content input.search-input').keypress();
+        		var timer = setInterval(function(){
+	            	if(triggers==5){
+	            		clearInterval(timer);
+	            		window.location.reload();
+	            		return;
+	            	}
+	            	triggers++;
+	                if($('.js-popover-content ul.list-divider.has-results li').length){
+	                    $('.js-popover-content ul.list-divider.has-results li')[0].click();
+	                    clearInterval(timer);
+	                    setTimeout(function(){
+	                    	if($('.js-modal-content .s-blocking div.block-text').length){
+	                    		$('.js-modal-content div.block-text').click();
+	                    		setTimeout(function(){
+	                    			$('.js-modal-content .sprite-close').click();
+	                    			if(currentMuteUsername == muteUsernames.length -1){
+	                    				console.log('unblock finsihed proceeding account click');
+	                    				startAccountClick();
+	                    			}else{
+	                    				currentMuteUsername++;
+	                    				console.log('proceeding unblock for next username');
+	                    				checkUnblock();
+	                    			}
+	                    		},100);
+	                    	}else{
+	                    		if(currentMuteUsername == muteUsernames.length -1){
+	                    			console.log('unblock finsihed proceeding account click');
+                    				startAccountClick();
+                    			}else{
+                    				currentMuteUsername++;
+                    				console.log('proceeding unblock for next username');
+                    				checkUnblock();
+                    			}
+	                    	}
+	                    },generalWait);
+	                }else{
+	                    console.log('searching again');
+	                    muteUsername = muteUsernames[currentMuteUsername];
+	                    var lastChar = muteUsername.substr(muteUsername.length - 1);
+	                    muteUsername = muteUsername.substr(0, muteUsername.length - 1);
+	                    $('.js-popover-content input.search-input').val(muteUsername);
+	                    setTimeout(function(){
+	                    	muteUsername = muteUsername + lastChar;
+	                    	$('.js-popover-content input.search-input').val(muteUsername);
+		                    setTimeout(function(){
+		                        console.log('triggering keydown again');
+		                        var el = $('.js-popover-content input.search-input')[0];
+		                        var event = new KeyboardEvent('keydown');
+		                        el.dispatchEvent(event);
+		                    },generalWait);
+	                    },generalWait);
+	                }
+	            },(generalWait+7000));
+        	},generalWait);
+		},generalWait);
+	},generalWait);
 }
 
 function startAccountClick(){
