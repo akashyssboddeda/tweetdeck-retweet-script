@@ -48,7 +48,7 @@ function start(){
     		user = 0;
     	}
     	console.log('retrieving user location from browser and user location is: '+user);
-    	sessionStorage.deleteItem('lastUser');
+    	sessionStorage.removeItem('lastUser');
     }
 
     onFirstLoadInit();
