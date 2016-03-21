@@ -67,7 +67,7 @@ function addBlackListOverlay () {
         var div = '<div id="tamper-logs" style="height:80px;overflow:auto;position: absolute;bottom: 0;left: 0;width: 100%;z-index: 1000;background: #fff;color: black;text-align: center;padding: 5px;"><h1 style="font-size:40px;">Logs are added here</h1><div id="tamper-log"></div></div>';
 		$('body').append(div);
     }
-    if($('#tamper-log-btn').length){
+    if(!$('#tamper-log-btn').length){
         $('body').append('<input style="z-index:2000;position:absolute;right:0;bottom:0;background:blue;color:white;" id="tamper-log-btn" type="button" value="copy logs">');
         setTimeout(function () {
             $('#tamper-log-btn').on('click',function () {
