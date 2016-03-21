@@ -113,8 +113,8 @@ function checkUnblock(){
 	                    clearInterval(timer);
 	                    setTimeout(function(){
 	                    	if($('.js-modal-content .s-blocking div.block-text').length){
-                                console.log('user is blocked');
-                                addTamperLog('user is blocked');
+                                console.log('user is blocked so unblocking');
+                                addTamperLog('user is blocked so unblocking');
 	                    		$('.js-modal-content div.block-text').click();
 	                    		setTimeout(function(){
 	                    			$('.js-modal-content .sprite-close').click();
@@ -126,21 +126,24 @@ function checkUnblock(){
                                             currentAccount++;
                                             console.log('Resetting currentMuteUsername to zero');
                                             addTamperLog('Resetting currentMuteUsername to zero');
+                                            $('.js-modals-container .sprite-close').click();
                                             startAccountClick();
                                         }else{
                                             console.log('Unblock Done. Bot stopped !!!');
                                             addTamperLog('Unblock Done. Bot stopped !!!');
+                                            $('.js-modals-container .sprite-close').click();
                                         }
 	                    			}else{
 	                    				currentMuteUsername++;
 	                    				console.log('proceeding unblock for next username');
                                         addTamperLog('proceeding unblock for next username');
+                                        $('.js-modals-container .sprite-close').click();
 	                    				checkUnblock();
 	                    			}
 	                    		},100);
 	                    	}else{
-                                console.log('user is not blocked');
-                                addTamperLog('user is not blocked');
+                                console.log('user is not blocked so do nothing');
+                                addTamperLog('user is not blocked so do nothing');
 	                    		if(currentMuteUsername == muteUsernames.length -1){
                                     if(!isCycleOver){
                                         console.log('unblock finished proceeding username search to RT');
@@ -149,15 +152,18 @@ function checkUnblock(){
                                         currentAccount++;                        
                                         console.log('Resetting currentMuteUsername to zero');
                                         addTamperLog('Resetting currentMuteUsername to zero');
+                                        $('.js-modals-container .sprite-close').click();
                                         startAccountClick();
                                     }else{
                                         console.log('Unblock Done. Bot stopped !!!');
                                         addTamperLog('Unblock Done. Bot stopped !!!');
+                                        $('.js-modals-container .sprite-close').click();
                                     }
                     			}else{
                     				currentMuteUsername++;
                     				console.log('proceeding unblock for next username');
                                     addTamperLog('proceeding unblock for next username');
+                                    $('.js-modals-container .sprite-close').click();
                     				checkUnblock();
                     			}
 	                    	}
