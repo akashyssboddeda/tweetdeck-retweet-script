@@ -171,7 +171,10 @@ function checkUnblock(){
         		var timer = setInterval(function(){
 	            	if(triggers==5){
 	            		clearInterval(timer);
-	            		window.location.reload();
+                        sessionStorage.setItem('lastUser',user);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },100);
 	            		return;
 	            	}
 	            	triggers++;
