@@ -55,7 +55,29 @@ function start(){
     	sessionStorage.removeItem('lastUser');
     }
 
-    onFirstLoadInit();
+    closeSidebarIfOpened();
+    
+}
+
+function closeSidebarIfOpened(){
+    var timer = setInterval(function(){
+        if($('.app-navigator').length){
+            clearInterval(timer);
+            console.log('checking if sidebar is opened or not before start of each cycle');
+            addTamperLog('checking if sidebar is opened or not before start of each cycle');
+            if(!$('header.is-condensed .icon-arrow-r-double').length){
+                $('.icon-arrow-r-double')[0].click();
+                console.log('sidebar is opened so closed');
+                addTamperLog('sidebar is opened so closed');
+            }else{
+                console.log('sidebar is closed already so do nothing');
+                addTamperLog('sidebar is closed already so do nothing');
+            }
+            setTimeout(function(){
+                onFirstLoadInit();
+            },100);
+        }
+    },generalWait);
 }
 
 function addBlackListOverlay () {
