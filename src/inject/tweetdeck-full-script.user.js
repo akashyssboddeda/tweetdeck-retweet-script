@@ -55,29 +55,24 @@ function start(){
     	sessionStorage.removeItem('lastUser');
     }
 
-    closeSidebarIfOpened();
+    onFirstLoadInit();
     
 }
 
 function closeSidebarIfOpened(){
-    var timer = setInterval(function(){
-        if($('.app-navigator').length){
-            clearInterval(timer);
-            console.log('checking if sidebar is opened or not before start of each cycle');
-            addTamperLog('checking if sidebar is opened or not before start of each cycle');
-            if(!$('header.is-condensed .icon-arrow-r-double').length){
-                $('.icon-arrow-r-double')[0].click();
-                console.log('sidebar is opened so closed');
-                addTamperLog('sidebar is opened so closed');
-            }else{
-                console.log('sidebar is closed already so do nothing');
-                addTamperLog('sidebar is closed already so do nothing');
-            }
-            setTimeout(function(){
-                onFirstLoadInit();
-            },100);
-        }
-    },generalWait);
+    console.log('checking if sidebar is opened or not before start of each cycle');
+    addTamperLog('checking if sidebar is opened or not before start of each cycle');
+    if(!$('header.is-condensed .icon-arrow-r-double').length){
+        $('.icon-arrow-r-double')[0].click();
+        console.log('sidebar is opened so closed');
+        addTamperLog('sidebar is opened so closed');
+    }else{
+        console.log('sidebar is closed already so do nothing');
+        addTamperLog('sidebar is closed already so do nothing');
+    }
+    setTimeout(function(){
+        startAccountClick(); // bot has to check unmute and unblock after changing default account
+    },100);
 }
 
 function addBlackListOverlay () {
@@ -110,12 +105,7 @@ function onFirstLoadInit(){
     var timer = setInterval(function(){
         if($('.app-navigator').length){
             clearInterval(timer);
-            // if(muteUsernames.length){
-            // 	checkMute();
-            // }else{
-            // 	startAccountClick();
-            // }
-            startAccountClick(); // bot has to check unmute and unblock after changing default account
+            closeSidebarIfOpened();
         }
     },generalWait);
 }
@@ -283,8 +273,6 @@ function selectUserAccount(){
             currentUserName = currentUserName.toLowerCase();
             console.log('current selected username: '+currentUserName);
             addTamperLog('current selected username: '+currentUserName);
-            console.log('calling clickDefaultAccountButton');
-            addTamperLog('calling clickDefaultAccountButton');
             clickDefaultAccountButton();
         },1000);
     },generalWait);
@@ -394,12 +382,12 @@ function loadTweets(){
                 }
             },scrollTimer);
         }else{
-        	console.log('No liked tweets, Goint to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
-            addTamperLog('No liked tweets, Goint to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
+        	console.log('No liked tweets, Going to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
+            addTamperLog('No liked tweets, Going to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
             setTimeout(function(){
-            	console.log('closing search sidebar');
-                addTamperLog('closing search sidebar');
-                $('.js-app-header .app-search-fake').click();
+            	// console.log('closing search sidebar');
+             //    addTamperLog('closing search sidebar');
+             //    $('.js-app-header .app-search-fake').click();
                 currentAccount++;
                 onFirstLoadInit();
             },generalWait);
@@ -551,18 +539,18 @@ function afterClickingRetweet(){
 	            	console.log('cycle over starting again in '+waitTime/60000+' minutes');
                     addTamperLog('cycle over starting again in '+waitTime/60000+' minutes');
 	                setTimeout(function(){
-	                	console.log('closing search sidebar');
-                        addTamperLog('closing search sidebar');
-	                	$('.js-app-header .app-search-fake').click();
+	                	// console.log('closing search sidebar');
+                  //       addTamperLog('closing search sidebar');
+	                	// $('.js-app-header .app-search-fake').click();
 	                    start();
 	                },waitTime);
 	            }else{
-	            	console.log('Goint to Change default account : '+currentAccount+ 'and waiting for '+waitTime/60000+' minutes');
-                    addTamperLog('Goint to Change default account : '+currentAccount+ 'and waiting for '+waitTime/60000+' minutes');
+	            	console.log('Going to Change default account : '+currentAccount+ ' and waiting for '+waitTime/60000+' minutes');
+                    addTamperLog('Going to Change default account : '+currentAccount+ ' and waiting for '+waitTime/60000+' minutes');
                     setTimeout(function(){
-	                	console.log('closing search sidebar');
-                        addTamperLog('closing search sidebar');
-                        $('.js-app-header .app-search-fake').click();
+	                	// console.log('closing search sidebar');
+                  //       addTamperLog('closing search sidebar');
+                  //       $('.js-app-header .app-search-fake').click();
 	                    currentAccount++;
 	                    user = 0;
                         console.log('resetting user to zero, current username is username#'+user);
@@ -586,7 +574,7 @@ function afterClickingRetweet(){
         	console.log('changing username and waiting for '+(generalWait/1000)+' seconds');
             addTamperLog('changing username and waiting for '+(generalWait/1000)+' seconds');
             setTimeout(function(){
-                onFirstLoadInit();
+                clickSearchBtn();
             },generalWait);
         }else{
             if(isCycleOver){
