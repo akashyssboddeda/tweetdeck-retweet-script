@@ -157,8 +157,8 @@ function removeMuteUsers(){
                         addTamperLog('cliking unmute');
                         $(v).find('input').click();
                     }
-                    console.log('index is '+k+' and limit is '+limit);
-                    addTamperLog('index is '+k+' and limit is '+limit);
+                    //console.log('index is '+k+' and limit is '+limit);
+                    //addTamperLog('index is '+k+' and limit is '+limit);
                     if(k == limit-1){
                         console.log('mute is done proceeding to unblock');
                         addTamperLog('mute is done proceeding to unblock');
@@ -394,8 +394,8 @@ function loadTweets(){
                 }
             },scrollTimer);
         }else{
-        	console.log('No liked tweets, Goint to Change default account : '+currentAccount+ 'and waiting for '+generalWait/1000+' seconds');
-            addTamperLog('No liked tweets, Goint to Change default account : '+currentAccount+ 'and waiting for '+generalWait/1000+' seconds');
+        	console.log('No liked tweets, Goint to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
+            addTamperLog('No liked tweets, Goint to Change default account : '+currentAccount+ ' and waiting for '+generalWait/1000+' seconds');
             setTimeout(function(){
             	console.log('closing search sidebar');
                 addTamperLog('closing search sidebar');
