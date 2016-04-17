@@ -16,6 +16,7 @@ var tweetCount = 2;
 var isCycleOver,tweetCounts,currentMuteUsername;
 var currentAccount,scrollTimer;
 var tweets = 0;
+var scrollLimit = 100;
 function start(){
 
     user = 0;
@@ -360,24 +361,38 @@ function clickLikes(){
 
 function loadTweets(){
     var scrollHeight = 100000;
-    var d = jQuery('.js-column-content .js-column-scroller.js-dropdown-container.scroll-alt');
-        d = d[0];
-
+    var lastKey = '';
+    var scrollRandom = Math.floor(Math.random()*scrollLimit);
+    addTamperLog('Scroll Random Number: '+scrollRandom);
     setTimeout(function () {
         getTweets();
     },(generalWait*5));
 
     function getTweets(){
         if($('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container').length && $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article').length){
+            //debugger
+            var d = jQuery('.js-column-content .js-column-scroller.js-dropdown-container.scroll-alt');
+                d = d[0];
+            var len = $(d).find('article.stream-item').length;
+            var dom = $(d).find('article.stream-item')[len-1];
+            var currentKey = $(dom).attr('data-key');
             tweets = $(d).find('article.stream-item').length;
             $(d).scrollTop(scrollHeight);
             setTimeout(function(){
-                if(tweets != $(d).find('article.stream-item').length){
-                    getTweets();
+                //debugger
+                if(lastKey != currentKey && scrollRandom){
                     console.log('scrolling tweets');
                     addTamperLog('scrolling tweets');
                     scrollHeight+=100000;
+                    lastKey = currentKey;
+                    getTweets();
+                    scrollRandom--;
                 }else{
+                    if(scrollRandom){
+                        addTamperLog('scroll end reached , selecting random tweet');
+                    }else{
+                        addTamperLog('scrollRandom limit reached zero , selecting random tweet');
+                    }
                     clickRandomTweet();
                 }
             },scrollTimer);
