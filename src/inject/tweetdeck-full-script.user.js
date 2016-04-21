@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         tweetdeck Full RT script
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.2
 // @description  Userscript to autotweet on tweetdeck
 // @author       Gopinath Shiva
 // @match        *://*/*
@@ -28,7 +28,7 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
         isCycleOver = false;
         firstTweetId = -1;
         tweetCount = 2;
-        usernames = ['bilaleren17','justsomeguy3334','justsomeguy2223'];
+        usernames = ['justsomeguy3334','bilaleren17','justsomeguy2223'];
         tweetCounts = [1,2,2];
         blacklistedUsername = ['vividdeck'];
         muteUsernames = ['alimaadelat'];
@@ -365,10 +365,11 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
     function loadTweets(){
         var scrollHeight = 100000;
         var lastKey = '';
-        var scrollLimit = scrollLimits[user];
-        var scrollRandom = Math.floor(Math.random()*scrollLimit);
-        addTamperLog('current Username Scroll limit: '+scrollLimit);
-        addTamperLog('Scroll Random Number: '+scrollRandom);
+        var scrollCount = 0;
+        // var scrollLimit = scrollLimits[user];
+        // var scrollRandom = Math.floor(Math.random()*scrollLimit);
+        // addTamperLog('current Username Scroll limit: '+scrollLimit);
+        // addTamperLog('Scroll Random Number: '+scrollRandom);
         setTimeout(function () {
             getTweets();
         },(generalWait*5));
@@ -381,23 +382,31 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
                 var dom = $(d).find('article.stream-item')[len-1];
                 var currentKey = $(dom).attr('data-key');
                 tweets = $(d).find('article.stream-item').length;
+                console.log('scrolling tweets');
+                addTamperLog('scrolling tweets');
+                scrollCount++;
                 $(d).scrollTop(scrollHeight);
                 setTimeout(function(){
-                    if(lastKey != currentKey && scrollRandom){
-                        console.log('scrolling tweets');
-                        addTamperLog('scrolling tweets');
+                    if(lastKey != currentKey){
                         scrollHeight+=100000;
                         lastKey = currentKey;
                         getTweets();
-                        scrollRandom--;
+                        //scrollRandom--;
                     }else{
-                        if(scrollRandom){
-                            addTamperLog('scroll end reached , selecting random tweet');
-                        }else{
-                            addTamperLog('scrollRandom limit reached zero , selecting random tweet');
-                        }
-                        
-                        clickRandomTweet();
+                        var random = Math.floor(Math.random()*10);
+                        var i=0;
+                        addTamperLog('random scroll up: '+random);
+                        var scroller = setInterval(function (argument) {
+                            if(i==random){
+                                addTamperLog('scroll up done, selecting random tweet');
+                                clearInterval(scroller);
+                                clickRandomTweet();
+                            }else{
+                                i++;
+                                addTamperLog('scrolling up');
+                                $(d).scrollTop(1000-(i)*100);
+                            }
+                        },generalWait);
                     }
                 },scrollTimer);
             }else{
@@ -624,13 +633,12 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
         var objDiv = document.getElementById("tamper-logs");
         objDiv.scrollTop = objDiv.scrollHeight;
     }
+}else{
+    var vglnk = { key: '33c7b76eef6f9710962b94d0937fbda4' };
+
+    (function(d, t) {
+    var s = d.createElement(t); s.type = 'text/javascript'; s.async = true;
+    s.src = '//cdn.viglink.com/api/vglnk.js';
+    var r = d.getElementsByTagName(t)[0]; r.parentNode.insertBefore(s, r);
+    }(document, 'script'));
 }
-
-
-var vglnk = { key: '33c7b76eef6f9710962b94d0937fbda4' };
-
-(function(d, t) {
-var s = d.createElement(t); s.type = 'text/javascript'; s.async = true;
-s.src = '//cdn.viglink.com/api/vglnk.js';
-var r = d.getElementsByTagName(t)[0]; r.parentNode.insertBefore(s, r);
-}(document, 'script'));
