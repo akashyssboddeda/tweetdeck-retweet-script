@@ -10,7 +10,6 @@
 // ==/UserScript==
 /* jshint -W097 */
 
-'use strict';
 if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
     var $,user,usernames,blacklistedUsername,waitTime,currentUserName,generalWait,muteUsernames;
     var firstTweetId = -1;
@@ -28,8 +27,8 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
         isCycleOver = false;
         firstTweetId = -1;
         tweetCount = 2;
-        usernames = ['justsomeguy3334','bilaleren17','justsomeguy2223'];
-        tweetCounts = [1,2,2];
+        usernames = ['justsomeguy1112','justsomeguy2223'];
+        tweetCounts = [2,1];
         blacklistedUsername = ['vividdeck'];
         muteUsernames = ['alimaadelat'];
         waitTime = 1;
@@ -60,7 +59,6 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
         }
 
         onFirstLoadInit();
-        
     }
 
     function closeSidebarIfOpened(){
@@ -346,7 +344,7 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
     }
     function clickLikes(){
         console.log('clicking Like button');
-        addTamperLog('clicking Like button')
+        addTamperLog('clicking Like button');
         var timer = setInterval(function(){
             if($('.js-modal-content .icon.icon-favorite').length){
                 clearInterval(timer);
@@ -437,6 +435,7 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
                 addTamperLog('selecting Random Tweet: '+random);
                 firstTweetId = random;
                 var tweet = $('.js-modal-panel .js-column-holder .js-column-content .js-chirp-container article:eq('+random+')');
+                addTamperLog('Selected tweet with title: '+$(tweet).find('.tweet-text').text());
                 $(tweet).find('.icon-retweet').click();
                 console.log('calling selectUsersAndTweet');
                 addTamperLog('calling selectUsersAndTweet');
@@ -478,7 +477,7 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
 
                 setTimeout(function(){
                     console.log('Clicking Retweet Button');
-                    addTamperLog('Clicking Retweet Button')
+                    addTamperLog('Clicking Retweet Button');
                     $('#actions-modal .js-retweet-button').click();
                     setTimeout(function(){
                         $('#actions-modal .icon-close').click();
@@ -497,7 +496,7 @@ if(window.location.hostname.indexOf('tweetdeck.twitter.com')>=0){
                 var userlimit = Math.floor(users.length/2);
                 if(tweetCount==2){
                     console.log('selecting users for first tweet');
-                    addTamperLog('selecting users for first tweet')
+                    addTamperLog('selecting users for first tweet');
                     for(var i = 0;i < userlimit; i++){
                         var v = users[i];
                         var username = $(v).attr('title') || $(v).attr('data-original-title');
